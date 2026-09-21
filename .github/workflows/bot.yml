@@ -1,10 +1,12 @@
-name: Telegram Bot Test
+name: ShenYan Bot
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "0 */5 * * *"
 
 jobs:
-  test:
+  run-bot:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,8 +18,8 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Test Telegram
+      - name: Run ShenYan
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-        run: |
-          python -c "import urllib.request, os; print(urllib.request.urlopen('https://api.telegram.org/bot' + os.environ['TELEGRAM_BOT_TOKEN'] + '/getMe').read().decode())"
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: python bot.py
